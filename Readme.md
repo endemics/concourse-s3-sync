@@ -8,7 +8,7 @@ Reverse-engineered from [`tobyirvine/concourse-s3-sync` docker image](https://hu
 
 - `secret_access_key`: Your AWS secret access key.
 
-- `region_name`: The AWS region for the bucket.
+- `region_name`: The AWS region for the bucket. Defaults to "us-east-1" if not specified.
 
 - `bucket`: the bucket in AWS to sync from/to.
 
