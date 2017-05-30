@@ -6,9 +6,9 @@ set -e
 exec 3>&1 # make stdout available as fd 3 for the result
 exec 1>&2 # redirect all output to stderr for logging
 
-source=$1
+workdir=$1
 
-if [ -z "$source" ]; then
+if [ -z "$workdir" ]; then
   echo "usage: $0 </full/path/to/dir>"
   exit 1
 fi
@@ -19,6 +19,14 @@ payload=`cat`
 bucket=$(echo "$payload" | jq -r '.source.bucket')
 path=$(echo "$payload" | jq -r '.source.path // ""')
 options=$(echo "$payload" | jq -r '.source.options // [] | join(" ")')
+
+# parse params
+source=$(echo "$payload" | jq -r '.params.source // ""')
+
+if [ ! -f "$workdir/$source" ]; then
+  echo "source $workdir/$source does not exist" >&2
+  exit 1
+fi
 
 # export for `aws` cli
 AWS_ACCESS_KEY_ID=$(echo "$payload" | jq -r '.source.access_key_id')
@@ -33,7 +41,7 @@ fi
 
 echo "Uploading to S3 as $AWS_ACCESS_KEY_ID..."
 aws --version
-eval aws s3 sync $source "s3://$bucket/$path" $options
+eval aws s3 sync "$workdir/$source" "s3://$bucket/$path" $options
 echo "...done."
 
 source "$(dirname $0)/emit.sh" >&3

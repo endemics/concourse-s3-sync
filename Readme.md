@@ -33,8 +33,7 @@ Consider the most recent `LastModified` timestamp as the most recent version
 TBD
 
 #### Parameters
-
-*None.*
+- `target`: The path, relative to the work directory, to sync with S3. If omitted, uses the work directory.
 
 ### `out`: Sync the local content to S3
 
@@ -42,4 +41,4 @@ TBD
 
 #### Parameters
 
-*None.*
+- `source`: The path to sync to S3, relative to the work directory. If omitted, uses the work directory.

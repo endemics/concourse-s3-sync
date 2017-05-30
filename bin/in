@@ -6,9 +6,9 @@ set -e
 exec 3>&1 # make stdout available as fd 3 for the result
 exec 1>&2 # redirect all output to stderr for logging
 
-dest=$1
+workdir=$1
 
-if [ -z "$dest" ]; then
+if [ -z "$workdir" ]; then
   echo "usage: $0 <path/to/volume>"
   exit 1
 fi
@@ -19,6 +19,10 @@ payload=`cat`
 bucket=$(echo "$payload" | jq -r '.source.bucket')
 path=$(echo "$payload" | jq -r '.source.path // ""')
 options=$(echo "$payload" | jq -r '.source.options // [] | join(" ")')
+
+# parse params
+dest=$(echo "$payload" | jq -r '.params.dest // ""')
+mkdir -p "$workdir/$dest"
 
 # export for `aws` cli
 AWS_ACCESS_KEY_ID=$(echo "$payload" | jq -r '.source.access_key_id')
@@ -32,7 +36,7 @@ if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
 fi
 
 echo "Downloading from S3..."
-eval aws s3 sync "s3://$bucket/$path" $dest $options
+eval aws s3 sync "s3://$bucket/$path" "$workdir/$dest" $options
 echo "...done."
 
 source "$(dirname $0)/emit.sh" >&3
