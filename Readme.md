@@ -1,6 +1,6 @@
 # S3 Sync resource
 
-Reversed engineered from `tobyirvine/concourse-s3-sync`
+Reverse-engineered from [`tobyirvine/concourse-s3-sync` docker image](https://hub.docker.com/r/tobyirvine/concourse-s3-sync/).
 
 ## Source Configuration
 
