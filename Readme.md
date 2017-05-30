@@ -12,7 +12,7 @@ Reverse-engineered from [`tobyirvine/concourse-s3-sync` docker image](https://hu
 
 - `bucket`: the bucket in AWS to sync from/to.
 
-- `path`: the path in AWS to sync from/to.
+- `path`: the path in AWS to sync from/to. If you want to specify the root of the bucket, set to "".
 
 - `options`: A list of options for the `aws s3` command. See [the aws s3 sync command documentation](http://docs.aws.amazon.com/cli/latest/reference/s3/sync.html) for more information on supported options.
 
