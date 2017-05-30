@@ -21,6 +21,7 @@ path=$(echo "$payload" | jq -r '.source.path // ""')
 options=$(echo "$payload" | jq -r '.source.options // [] | join(" ")')
 
 # parse params
+skip_download=$(echo "$payload" | jq -r '.params.skip_download // "false"')
 dest=$(echo "$payload" | jq -r '.params.dest // ""')
 mkdir -p "$workdir/$dest"
 
@@ -35,8 +36,12 @@ if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
   export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 fi
 
-echo "Downloading from S3..."
-eval aws s3 sync "s3://$bucket/$path" "$workdir/$dest" $options
-echo "...done."
+if [ "$skip_download" != "true" ]; then
+    echo "Downloading from S3..."
+    eval aws s3 sync "s3://$bucket/$path" "$workdir/$dest" $options
+    echo "...done."
+else
+    echo "skip_download parameter is set to \"$skip_download\", skipping download"
+fi
 
 source "$(dirname $0)/emit.sh" >&3

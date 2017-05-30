@@ -34,6 +34,7 @@ TBD
 
 #### Parameters
 - `dest`: The path, relative to the work directory, to sync with S3. If omitted, uses the work directory.
+- `skip_download`: If set to `true`, then the download from S3 is skipped completely. Only useful while set in `put` using `get_params`, to avoid the implicit `get` to download back the content of the bucket.
 
 ### `out`: Sync the local content to S3
 
