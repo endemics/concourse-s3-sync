@@ -23,7 +23,7 @@ options=$(echo "$payload" | jq -r '.source.options // [] | join(" ")')
 # parse params
 source=$(echo "$payload" | jq -r '.params.source // ""')
 
-if [ ! -f "$workdir/$source" ]; then
+if [ ! -e "$workdir/$source" ]; then
   echo "source $workdir/$source does not exist" >&2
   exit 1
 fi
